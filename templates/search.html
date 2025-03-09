@@ -1,0 +1,103 @@
+{% extends 'master.html' %}
+{% block title %} Search | E-Shopper{% endblock%}
+{% block body %}
+<style>
+    /* Custom CSS for product images */
+    .image-container {
+        height: 300px; /* Fixed height for image container */
+        overflow: hidden;
+        position: relative;
+    }
+
+    .product-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensure images cover the container */
+    }
+
+    .product-image-wrapper {
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border: 1px solid #ddd; /* Border to define card boundaries */
+        border-radius: 5px; /* Rounded corners for the card */
+    }
+
+    .product-overlay {
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+    }
+
+    .add-to-cart {
+        margin-top: 10px;
+    }
+
+    .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Ensure cards take full height of their column */
+    }
+
+    .card-body {
+        flex-grow: 1; /* Ensure card body takes up the remaining space */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .row {
+        margin: 0; /* Remove default row margin */
+    }
+
+    .col-sm-4 {
+        padding: 15px; /* Add padding to columns */
+    }
+
+    .features_items .title {
+        margin-bottom: 30px; /* Space below the title */
+    }
+</style>
+<div class="container">
+    <div class="features_items">
+        <h2 class="title text-center">Serach Results</h2>
+        {% if product|length < 1 %}
+        <div class="content-404">
+            <img src="images/404/404.png" class="img-responsive" alt="" />
+            <h1><b>OPPS!</b> We Couldn’t Find this Product</h1>
+            <h4><a href="{% url 'index' %}">Bring me back Home</a></h4>
+        </div>
+        {% endif %}
+        <div class="row">
+            {% for prod in product %}
+            <div class="col-sm-4 mb-4">
+                <div class="product-image-wrapper card h-100">
+                    <div class="single-products card-body">
+                        <div class="productinfo text-center">
+                            <div class="image-container">
+                                <img src="/{{prod.image}}" alt="" class="product-img"/>
+                            </div>
+                            <h2>₹{{prod.price}}</h2>
+                            <p>{{prod.name}}</p>
+                            <a href="{% url 'cart_add' prod.id %}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                        </div>
+                        <div class="product-overlay">
+                            <div class="overlay-content">
+                                <h2>₹{{prod.price}}</h2>
+                                <p>{{prod.name}}</p>
+                                <a href="{% url 'cart_add' prod.id %}" class="btn btn-default add-to-cart" target="_blank"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="choose">
+                        <ul class="nav nav-pills nav-justified">
+                            <li><a href="{% url 'product_detail' prod.id %}" target="_blank"><i class="fa fa-plus-square"></i> View Product</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div><!--features_items-->
+</div>
+{% endblock %}
